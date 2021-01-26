@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/url"
 	"os"
 
 	"gopkg.in/yaml.v2"
@@ -13,7 +14,7 @@ import (
 var config Config
 
 type Config struct {
-	URL          string
+	URL          *url.URL
 	TwitterCreds struct {
 		ConsumerKey    string `yaml:"consumerKey"`
 		ConsumerSecret string `yaml:"consumerSecret"`
@@ -37,7 +38,7 @@ func init() {
 	}
 }
 
-func parseConfig(configFile string, url string) error {
+func parseConfig(configFile string, urlString string) error {
 	file, err := os.Open(configFile)
 	if err != nil {
 		return err
@@ -55,12 +56,17 @@ func parseConfig(configFile string, url string) error {
 		return err
 	}
 
-	if url == "" {
+	if urlString == "" {
 		return fmt.Errorf("You need to specify a URL of a user or a post to check")
 	}
 
-	config.URL = url
+	// Check if the URL is valid
+	url, err := url.ParseRequestURI(urlString)
+	if err != nil {
+		return fmt.Errorf("The URL provided is not valid. URL: %s", url.String())
+	}
 
+	config.URL = url
 	return nil
 }
 
