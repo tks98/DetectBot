@@ -8,8 +8,6 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/tks98/Social-Data-Collector/util/strutil"
-	"github.com/tks98/Social-Data-Collector/util/urlutil"
 	"gopkg.in/yaml.v2"
 )
 
@@ -17,7 +15,6 @@ var config Config
 
 type Config struct {
 	URL          url.URL
-	SocialType   string
 	Socials      []string `yaml:"socials"`
 	TwitterCreds struct {
 		ConsumerKey    string `yaml:"consumerKey"`
@@ -64,22 +61,14 @@ func parseConfig(configFile string, urlString string) error {
 		return fmt.Errorf("You need to specify a URL of a user or a post to check")
 	}
 
-	// Check if the URL is valid
+	// Check if the URL is valid syntactically
 	url, err := url.ParseRequestURI(urlString)
 	if err != nil {
-		return fmt.Errorf("The URL provided is not valid. URL: %s", url.String())
-	}
-
-	// Determine the type of the URL
-	socialType := urlutil.ParseSocial(url)
-
-	// Check if the type is supported
-	if !strutil.Contains(config.Socials, socialType) {
-		return fmt.Errorf(err.Error())
+		return fmt.Errorf("The URL provided is not a valid URL: %s", url.String())
 	}
 
 	config.URL = *url
-	config.SocialType = socialType
+
 	return nil
 }
 
