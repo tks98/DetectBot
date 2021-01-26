@@ -13,8 +13,7 @@ import (
 var config Config
 
 type Config struct {
-	User         string
-	Thread       string
+	URL          string
 	TwitterCreds struct {
 		ConsumerKey    string `yaml:"consumerKey"`
 		ConsumerSecret string `yaml:"consumerSecret"`
@@ -25,21 +24,20 @@ type Config struct {
 
 func init() {
 	config := flag.String("c", "", "Specifies path to config file")
-	user := flag.String("u", "", "Specifies a URL to a user to check")
-	thread := flag.String("t", "", "Specifies a thread to check")
+	url := flag.String("url", "", "Specifies a URL")
 	flag.Parse()
 
 	if *config == "" {
 		log.Fatal("You need to specify a configuration file")
 	}
 
-	err := parseConfig(*config, *user, *thread)
+	err := parseConfig(*config, *url)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func parseConfig(configFile string, user string, thread string) error {
+func parseConfig(configFile string, url string) error {
 	file, err := os.Open(configFile)
 	if err != nil {
 		return err
@@ -57,15 +55,11 @@ func parseConfig(configFile string, user string, thread string) error {
 		return err
 	}
 
-	if user == "" && thread == "" {
-		return fmt.Errorf("You need to specify a link to a user, or a thread. Use the -help flag for assistance")
-	} else if user == "" {
-		config.Thread = thread
-	} else if thread == "" {
-		config.User = user
-	} else {
-		return fmt.Errorf("You specified too many flags!! Type -help for help")
+	if url == "" {
+		return fmt.Errorf("You need to specify a URL of a user or a post to check")
 	}
+
+	config.URL = url
 
 	return nil
 }

@@ -1,9 +1,9 @@
-package internal
+package log
 
 import "go.uber.org/zap"
 
 // Logger is a shared global logger
-var Logger *zap.SugaredLogger
+var Print *zap.SugaredLogger
 
 func init() {
 	// setup zap logger according to their quick start guide
@@ -13,5 +13,5 @@ func init() {
 	}
 	defer logger.Sync()
 	sugar := logger.Sugar()
-	Logger = sugar
+	Print = sugar
 }
