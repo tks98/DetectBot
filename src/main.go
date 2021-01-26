@@ -6,5 +6,7 @@ import (
 )
 
 func main() {
+
 	i.Logger.Info(config.GetConfig())
+
 }

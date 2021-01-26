@@ -1,6 +1,8 @@
 package config
 
 import (
+	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -11,6 +13,8 @@ import (
 var config Config
 
 type Config struct {
+	User         string
+	Thread       string
 	TwitterCreds struct {
 		ConsumerKey    string `yaml:"consumerKey"`
 		ConsumerSecret string `yaml:"consumerSecret"`
@@ -20,17 +24,22 @@ type Config struct {
 }
 
 func init() {
-	if len(os.Args) < 2 {
-		log.Fatal("No configuration file was specified")
+	config := flag.String("c", "", "Specifies path to config file")
+	user := flag.String("u", "", "Specifies a URL to a user to check")
+	thread := flag.String("t", "", "Specifies a thread to check")
+	flag.Parse()
+
+	if *config == "" {
+		log.Fatal("You need to specify a configuration file")
 	}
 
-	err := parseConfig(os.Args[1])
+	err := parseConfig(*config, *user, *thread)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func parseConfig(configFile string) error {
+func parseConfig(configFile string, user string, thread string) error {
 	file, err := os.Open(configFile)
 	if err != nil {
 		return err
@@ -43,11 +52,19 @@ func parseConfig(configFile string) error {
 		return err
 	}
 
-	log.Print(string(bytes))
-
 	err = yaml.UnmarshalStrict(bytes, &config)
 	if err != nil {
 		return err
+	}
+
+	if user == "" && thread == "" {
+		return fmt.Errorf("You need to specify a link to a user, or a thread. Use the -help flag for assistance")
+	} else if user == "" {
+		config.Thread = thread
+	} else if thread == "" {
+		config.User = user
+	} else {
+		return fmt.Errorf("You specified too many flags!! Type -help for help")
 	}
 
 	return nil
