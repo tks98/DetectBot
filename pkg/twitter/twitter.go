@@ -2,6 +2,7 @@ package twitter
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
@@ -58,5 +59,29 @@ func (c *Client) CheckIfUserExists(username string) (bool, error) {
 
 	log.Print.Info(user)
 	return true, err
+}
 
+// checkIfTwitter checks if the url supplied is that of a twitter user
+// example url: https://twitter.com/userNameGoeshere
+func checkIfTwitterUser(url string) (bool, error) {
+
+	user := strings.Split(url, "/")
+	log.Print.Info(user)
+
+	if len(user) != 4 {
+		return false, nil
+	}
+
+	if user[0] == "https:" && user[2] == "twitter.com" {
+		exists, err := client.CheckIfUserExists(user[3])
+		if err != nil {
+			return false, err
+		}
+
+		if !exists {
+			return false, nil
+		}
+	}
+	fmt.Println(user)
+	return true, nil
 }
