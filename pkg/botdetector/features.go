@@ -1,4 +1,4 @@
-package features
+package botdetector
 
 // Features is a type that will get populated before being sent to the skllearn script for processing
 type Features struct {
@@ -12,4 +12,8 @@ type Features struct {
 	StatusesCount int
 	ListedCount   int
 	bot           bool
+}
+
+func (f Features) RunAIScript() error {
+	return nil
 }

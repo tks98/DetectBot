@@ -14,7 +14,7 @@ import (
 var config Config
 
 type Config struct {
-	URL          url.URL
+	URL          []url.URL
 	Socials      []string `yaml:"socials"`
 	TwitterCreds struct {
 		ConsumerKey    string `yaml:"consumerKey"`
@@ -67,7 +67,7 @@ func parseConfig(configFile string, urlString string) error {
 		return fmt.Errorf("The URL provided is not a valid URL: %s", url.String())
 	}
 
-	config.URL = *url
+	config.URL = append(config.URL, *url)
 
 	return nil
 }
