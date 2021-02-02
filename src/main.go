@@ -47,7 +47,7 @@ func NewSocialMedia(url url.URL) social.Media {
 
 	// Depending on the URL, return the correct social media type
 	if url.String() == "twitter.com" {
-		return twitter.Media{Client: &gotwitter.Client{}}
+		return twitter.Media{Client: &gotwitter.Client{}, URL: url}
 	}
 
 	return nil
