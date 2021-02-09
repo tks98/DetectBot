@@ -54,7 +54,10 @@ func (b BotDetector) Start() error {
 	if err != nil {
 		return err
 	}
-	features.RunAIScript()
+	err = features.RunAIScript()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
