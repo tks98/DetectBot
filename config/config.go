@@ -3,6 +3,7 @@ package config
 import (
 	"flag"
 	"fmt"
+	"github.com/tks98/Social-Data-Collector/pkg/twitter"
 	"io/ioutil"
 	"log"
 	"net/url"
@@ -16,12 +17,26 @@ var config Config
 type Config struct {
 	URL          []url.URL
 	Socials      []string `yaml:"socials"`
-	TwitterCreds struct {
+	Twitter struct {
 		ConsumerKey    string `yaml:"consumerKey"`
 		ConsumerSecret string `yaml:"consumerSecret"`
 		AccessToken    string `yaml:"accessToken"`
 		AccessSecret   string `yaml:"accessSecret"`
-	} `yaml:"twitterCreds"`
+		Media twitter.Media
+	} `yaml:"twitter"`
+	Logger struct {
+		Level            string   `yaml:"level"`
+		Encoding         string   `yaml:"encoding"`
+		OutputPaths      []string `yaml:"outputPaths"`
+		ErrorOutputPaths []string `yaml:"errorOutputPaths"`
+		EncoderConfig    struct {
+			MessageKey   string `yaml:"messageKey"`
+			LevelKey     string `yaml:"levelKey"`
+			LevelEncoder string `yaml:"levelEncoder"`
+			CallerKey    string `yaml:"callerKey"`
+		} `yaml:"encoderConfig"`
+	} `yaml:"logger"`
+
 }
 
 func init() {
@@ -75,3 +90,11 @@ func parseConfig(configFile string, urlString string) error {
 func GetConfig() *Config {
 	return &config
 }
+
+
+// GetConfigs returns the global configs of the controller
+func GetConfigs() *Config {
+	return &config
+}
+
+

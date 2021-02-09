@@ -6,12 +6,12 @@ type Features struct {
 	Name          string
 	Description   string
 	Status        string
-	Verified      string
+	Verified      bool
 	Followers     int
 	Friends       int
 	StatusesCount int
 	ListedCount   int
-	bot           bool
+	Bot           bool
 }
 
 func (f Features) RunAIScript() error {
