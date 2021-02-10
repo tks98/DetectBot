@@ -23,6 +23,8 @@ def main():
     X = data[features].iloc[:,:-1] # independant feature variables (twitter account attributes)
     y = data[features].iloc[:,-1] # dependant target variable (bot indication)
 
+    print(X)
+
     # split dataset into training and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=110)
 
@@ -48,7 +50,34 @@ def DecisionTree(X_train, X_test, y_train, y_test):
     print("Twitter bot detection using training dataset: ", training_accuracy ,"%")
     print("Twitter bot detection using test dataset: ", test_accuracy ,"%")
 
+    predictUser(clf, X_train)
+
     return training_accuracy, test_accuracy
+
+def predictUser(clf, training_independant_features):
+    independant_features = parseCleanDeclareFeatureSelect("/Users/tsmith/Documents/Projects/Social-Data-Collector/src/user.csv")
+    print(independant_features)
+    prediction = clf.predict(independant_features)
+    print("Prediction: ", prediction)
+
+
+def parseCleanDeclareFeatureSelect(path):
+    # parse the training data
+    data = pandas.read_csv(path, encoding = "ISO-8859-1")
+
+    # clean data
+    data['screen_name_binary'] = data.screen_name.str.contains("", case=False, na=False)
+    data['name_binary'] = data.name.str.contains("", case=False, na=False)
+    data['description_binary'] = data.description.str.contains("", case=False, na=False)
+    data['status_binary'] = data.status.str.contains("", case=False, na=False)
+    data['listedcount_binary'] = (data.listedcount>20000)==False
+
+    # declare features
+    features = ['screen_name_binary', 'name_binary', 'description_binary', 'status_binary', 'verified', 'followers_count', 'friends_count', 'statuses_count', 'listedcount_binary', 'bot']
+
+    # feature selection stage
+    independantFeatures = data[features].iloc[:,:-1] # independant feature variables (twitter account attributes)
+    return independantFeatures
 
 
 if __name__ == '__main__':

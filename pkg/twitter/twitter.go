@@ -71,12 +71,12 @@ func (t Media) GetFeatures() (botdetector.Features, error) {
 		Name: user.Name,
 		Description: user.Description,
 		Status: user.Status.Text,
-		Verified: user.Verified,
-		Followers: user.FollowersCount,
-		Friends: user.FriendsCount,
-		StatusesCount: user.StatusesCount,
-		ListedCount: user.ListedCount,
-		Bot: false,
+		Verified: fmt.Sprintf("%v", user.Verified),
+		Followers: fmt.Sprintf("%v", user.FollowersCount),
+		Friends: fmt.Sprintf("%v", user.FriendsCount),
+		StatusesCount: fmt.Sprintf("%v", user.StatusesCount),
+		ListedCount: fmt.Sprintf("%v", user.ListedCount),
+		Bot: fmt.Sprintf("%v", false),
 	}
 
 	return features, nil
