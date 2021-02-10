@@ -3,7 +3,7 @@ package config
 import (
 	"flag"
 	"fmt"
-	"github.com/tks98/Social-Data-Collector/pkg/twitter"
+	"github.com/tks98/DetectBot/pkg/twitter"
 	"io/ioutil"
 	"log"
 	"net/url"

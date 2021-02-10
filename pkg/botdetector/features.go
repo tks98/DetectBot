@@ -3,7 +3,7 @@ package botdetector
 import (
 	"encoding/csv"
 	"fmt"
-	"github.com/tks98/Social-Data-Collector/internal/logger"
+	"github.com/tks98/DetectBot/internal/logger"
 	"os"
 	"os/exec"
 	"path/filepath"

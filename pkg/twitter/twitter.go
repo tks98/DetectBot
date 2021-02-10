@@ -3,8 +3,8 @@ package twitter
 import (
 	"fmt"
 	"github.com/dghubble/oauth1"
-	"github.com/tks98/Social-Data-Collector/internal/logger"
-	"github.com/tks98/Social-Data-Collector/pkg/botdetector"
+	"github.com/tks98/DetectBot/internal/logger"
+	"github.com/tks98/DetectBot/pkg/botdetector"
 	"net/url"
 	"strings"
 

@@ -1,4 +1,4 @@
-module github.com/tks98/Social-Data-Collector
+module github.com/tks98/DetectBot
 
 go 1.15
 

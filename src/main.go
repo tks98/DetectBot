@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/tks98/Social-Data-Collector/config"
-	"github.com/tks98/Social-Data-Collector/internal/logger"
-	"github.com/tks98/Social-Data-Collector/pkg/social"
-	"github.com/tks98/Social-Data-Collector/pkg/twitter"
+	"github.com/tks98/DetectBot/config"
+	"github.com/tks98/DetectBot/internal/logger"
+	"github.com/tks98/DetectBot/pkg/social"
+	"github.com/tks98/DetectBot/pkg/twitter"
 	"net/url"
 	"strings"
 )
