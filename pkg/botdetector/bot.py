@@ -3,6 +3,7 @@ import pandas
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
+from os import path
 
 
 def main():
@@ -23,8 +24,6 @@ def main():
     X = data[features].iloc[:,:-1] # independant feature variables (twitter account attributes)
     y = data[features].iloc[:,-1] # dependant target variable (bot indication)
 
-    print(X)
-
     # split dataset into training and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=110)
 
@@ -41,27 +40,28 @@ def DecisionTree(X_train, X_test, y_train, y_test):
     y_pred_train = clf.predict(X_train)
     y_pred_test = clf.predict(X_test)
 
-    # calculate the accuracy score of our training and test predictions
-    training_accuracy = accuracy_score(y_train, y_pred_train) * 100
-    test_accuracy = accuracy_score(y_test, y_pred_test) * 100
+    # use the trained model and the independant features training data to predict if a user is a bot
+    prediction = predictUser(clf)
 
-    # print results
-    print("Classification")
-    print("Twitter bot detection using training dataset: ", training_accuracy ,"%")
-    print("Twitter bot detection using test dataset: ", test_accuracy ,"%")
+    # get training accuracy
+    training_accuracy = str(round(accuracy_score(y_train, y_pred_train) * 100)) + "%"
 
-    predictUser(clf, X_train)
 
-    return training_accuracy, test_accuracy
+    if prediction[0] == 1:
+        print("BOT-" +training_accuracy)
+        return
+    print("HUMAN-" +training_accuracy)
+    return
 
-def predictUser(clf, training_independant_features):
-    independant_features = parseCleanDeclareFeatureSelect("/Users/tsmith/Documents/Projects/Social-Data-Collector/src/user.csv")
-    print(independant_features)
+# predictUser uses the trained model and the features from the provided user.csv file to predict if that user is a bot
+def predictUser(clf):
+    independant_features = getCleanedFeaturesFromFile(path.abspath("../pkg/botdetector/user.csv"))
     prediction = clf.predict(independant_features)
-    print("Prediction: ", prediction)
+    return prediction
 
 
-def parseCleanDeclareFeatureSelect(path):
+
+def getCleanedFeaturesFromFile(path):
     # parse the training data
     data = pandas.read_csv(path, encoding = "ISO-8859-1")
 

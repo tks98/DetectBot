@@ -39,10 +39,9 @@ func (t Media) GetFeatures() (botdetector.Features, error) {
 	// Parse the username from the URL
 	var username []string
 	splitURL := strings.Split(t.URL.String(), "/")
-	logger.Log.Info(splitURL)
 
 	if len(splitURL) == 4 {
-		username =  append(username, splitURL[3])
+		username = append(username, splitURL[3])
 	} else {
 		return botdetector.Features{}, fmt.Errorf("unsupported twitter url, please supply it in the format: https://twitter.com/username")
 	}
@@ -66,19 +65,21 @@ func (t Media) GetFeatures() (botdetector.Features, error) {
 
 	user := users[0]
 
+	var status string
+
+
 	features := botdetector.Features{
-		ScreenName: user.ScreenName,
-		Name: user.Name,
-		Description: user.Description,
-		Status: user.Status.Text,
-		Verified: fmt.Sprintf("%v", user.Verified),
-		Followers: fmt.Sprintf("%v", user.FollowersCount),
-		Friends: fmt.Sprintf("%v", user.FriendsCount),
+		ScreenName:    user.ScreenName,
+		Name:          user.Name,
+		Description:   user.Description,
+		Status:        status,
+		Verified:      fmt.Sprintf("%v", user.Verified),
+		Followers:     fmt.Sprintf("%v", user.FollowersCount),
+		Friends:       fmt.Sprintf("%v", user.FriendsCount),
 		StatusesCount: fmt.Sprintf("%v", user.StatusesCount),
-		ListedCount: fmt.Sprintf("%v", user.ListedCount),
-		Bot: fmt.Sprintf("%v", false),
+		ListedCount:   fmt.Sprintf("%v", user.ListedCount),
+		Bot:           fmt.Sprintf("%v", false),
 	}
 
 	return features, nil
 }
-

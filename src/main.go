@@ -54,9 +54,15 @@ func (b BotDetector) Start() error {
 	if err != nil {
 		return err
 	}
-	err = features.RunAIScript()
+	bot, confidence,  err := features.RunAIScript()
 	if err != nil {
 		return err
+	}
+
+	if bot {
+		logger.Log.Infof("User is %s a bot", confidence)
+	} else {
+		logger.Log.Infof("User is %s not bot", confidence)
 	}
 	return nil
 }
