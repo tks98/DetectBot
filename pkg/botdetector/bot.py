@@ -8,7 +8,7 @@ from os import path
 
 def main():
     # parse the training data
-    data = pandas.read_csv('/Users/tsmith/Documents/Projects/Social-Data-Collector/pkg/botdetector/Cleaned_TrainData.csv', encoding = "ISO-8859-1")
+    data = pandas.read_csv('/Users/tsmith/Projects/DetectBot/pkg/botdetector/Cleaned_TrainData.csv', encoding = "ISO-8859-1")
 
     # clean data
     data['screen_name_binary'] = data.screen_name.str.contains("", case=False, na=False)
@@ -46,7 +46,6 @@ def DecisionTree(X_train, X_test, y_train, y_test):
     # get training accuracy
     training_accuracy = str(round(accuracy_score(y_train, y_pred_train) * 100)) + "%"
 
-
     if prediction[0] == 1:
         print("BOT-" +training_accuracy)
         return
@@ -58,8 +57,6 @@ def predictUser(clf):
     independant_features = getCleanedFeaturesFromFile(path.abspath("../pkg/botdetector/user.csv"))
     prediction = clf.predict(independant_features)
     return prediction
-
-
 
 def getCleanedFeaturesFromFile(path):
     # parse the training data

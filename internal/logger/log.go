@@ -1,7 +1,6 @@
 package logger
 
 import (
-	"encoding/json"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -32,35 +31,35 @@ func InitLogger(config []byte) {
 
 func newLogger(config []byte) Logger {
 
-	// Use a default logging config if one is not supplied
-	if config == nil {
-		config = []byte(`{
-		"level": "debug",
-		"encoding": "json",
-		"outputPaths": ["stdout", "/tmp/logs"],
-		"errorOutputPaths": ["stderr"],
-		"initialFields": {"foo": "bar"},
-		"encoderConfig": {
-		  "messageKey": "msg",
-		  "levelKey": "level",
-		  "levelEncoder": "lowercase",
-          "callerKey": "caller"
-		}
-	  }`)
-	}
+	cfg := zap.Config{
+		Encoding:         "json",
+		Level:            zap.NewAtomicLevelAt(zapcore.DebugLevel),
+		OutputPaths:      []string{"stderr"},
+		ErrorOutputPaths: []string{"stderr"},
+		EncoderConfig: zapcore.EncoderConfig{
+			MessageKey: "message",
 
-	var cfg zap.Config
-	if err := json.Unmarshal(config, &cfg); err != nil {
-		panic(err)
-	}
+			LevelKey:    "level",
+			EncodeLevel: zapcore.CapitalLevelEncoder,
 
-	cfg.EncoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
+			TimeKey:    "time",
+			EncodeTime: zapcore.ISO8601TimeEncoder,
+
+			CallerKey:    "caller",
+			EncodeCaller: zapcore.ShortCallerEncoder,
+		},
+	}
 
 	logger, err := cfg.Build()
 	if err != nil {
 		panic(err)
 	}
-	defer logger.Sync()
+	defer func(logger *zap.Logger) {
+		err := logger.Sync()
+		if err != nil {
+
+		}
+	}(logger)
 
 	logger.Info("logger construction succeeded")
 
